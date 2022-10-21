@@ -1,2 +1,2 @@
-#!/bin/bash
 gcc $CFILE -o cisfun
+0x00-hello_world
