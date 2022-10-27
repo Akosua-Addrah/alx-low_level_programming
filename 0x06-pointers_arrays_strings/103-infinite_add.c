@@ -1,54 +1,53 @@
-#include "holberton.h"
-#include <stdio.h>
+#include "main.h"
+
 /**
  * infinite_add - adds two numbers
- * @n1: number one.
- * @n2: number two.
- * @r: buffer that the function will use to store the result.
- * @size_r: buffer size:
- * Return: the pointer to dest.
+ * @n1: number 1
+ * @n2: number 2
+ * @r: buffer that the function will use to store the result
+ * @size_r: buffer size
+ * Return: pointer to the result
  */
 
 char *infinite_add(char *n1, char *n2, char *r, int size_r)
 {
-	int c1 = 0, c2 = 0, op, bg, dr1, dr2, add = 0;
+	int carry_val = 0, i, j, k = 1, max, result;
+	char buffer;
 
-	while (*(n1 + c1) != '\0')
-		c1++;
-	while (*(n2 + c2) != '\0')
-		c2++;
-	if (c1 >= c2)
-		bg = c1;
+	for (i = 0; n1[i]; i++)
+		;
+	for (j = 0; n2[j]; j++)
+		;
+	if (i >= j)
+		max = i;
 	else
-		bg = c2;
-	if (size_r <= bg + 1)
+		max = j;
+	if (size_r <= max)
 		return (0);
-	r[bg + 1] = '\0';
-	c1--, c2--, size_r--;
-	dr1 = *(n1 + c1) - 48, dr2 = *(n2 + c2) - 48;
-	while (bg >= 0)
+	i--, j--;
+	while (max-- > 0)
 	{
-		op = dr1 + dr2 + add;
-		if (op >= 10)
-			add = op / 10;
+		if (i >= 0 && j >= 0)	/* n1 and n2 still have values */
+			result = (n1[i] - 48) + (n2[j] - 48) + carry_val;
+		else if (i < 0 && j >= 0) /* n2 only */
+			result = (n2[j] - 48) + carry_val;
+		else if (i >= 0 && j < 0) /* n1 only */
+			result = (n1[i] - 48) + carry_val;
+		if (result > 9)
+			r[k - 1] = (result % 10) + 48, carry_val = 1;
 		else
-			add = 0;
-		if (op > 0)
-		*(r + bg) = (op % 10) + 48;
-		else
-			*(r + bg) = '0';
-		if (c1 > 0)
-			c1--, dr1 = *(n1 + c1) - 48;
-		else
-			dr1 = 0;
-		if (c2 > 0)
-			c2--, dr2 = *(n2 + c2) - 48;
-		else
-			dr2 = 0;
-		bg--, size_r--;
+			r[k - 1] = result + '0', carry_val = 0;
+		i--, j--, k++, size_r--;
+		if (size_r <= 1)
+			return (0);
+		if (i < 0 && j < 0)
+			break;
 	}
-	if (*(r) == '0')
-		return (r + 1);
-	else
-		return (r);
+	if (result > 9 && size_r >= 0)
+		r[k - 1] = '1', r[k] = '\0';
+	for (i = 0; r[i]; i++)
+		;
+	for (j = 0; j < (i - 1) / 2; j++)
+		buffer = r[j], r[j] = r[i - j - 1], r[i - j - 1] = buffer;
+	return (r);
 }
