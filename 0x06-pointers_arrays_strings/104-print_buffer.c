@@ -1,34 +1,61 @@
-#include "holberton.h"
+#include "main.h"
 #include <stdio.h>
 
 /**
- * isPrintableASCII - determines if n is a printable ASCII char
- * @n: integer
- * Return: 1 if true, 0 if false
+ * print_line - prints a s bytes of a buffer
+ * @c: buffer to print
+ * @s: bytes of buffer to print
+ * @l: line of buffer to print
+ *
+ * Return: void
  */
-int isPrintableASCII(int n)
+
+void print_line(char *c, int s, int l)
 {
-	return (n >= 32 && n <= 126);
+	int j, k;
+
+	for (j = 0; j <= 9; j++)
+	{
+		if (j <= s)
+			printf("%02x", c[l * 10 + j]);
+		else
+			printf("  ");
+		if (j % 2)
+			putchar(' ');
+	}
+	for (k = 0; k <= s; k++)
+	{
+		if (c[l * 10 + k] > 31 && c[l * 10 + k] < 127)
+			putchar(c[l * 10 + k]);
+		else
+			putchar('.');
+	}
 }
 
 /**
- * printHexes - print hex values for string b in formatted form
- * @b: string to print
- * @start: starting position
- * @end: ending position
+ * print_buffer - prints a buffer
+ * @b: buffer to print
+ * @size: size of buffer
+ *
+ * Return: void
  */
-void printHexes(char *b, int start, int end)
+void print_buffer(char *b, int size)
 {
-	int i = 0;
+	int i;
 
-	while (i < 10)
+	for (i = 0; i <= (size - 1) / 10 && size; i++)
 	{
-		if (i < end)
-			printf("%02x", *(b + start + i));
+		printf("%08x: ", i * 10);
+		if (i < size / 10)
+		{
+			print_line(b, 9, i);
+		}
 		else
-			printf("  ");
-		if (i % 2)
-			printf(" ");
-		i++;
+		{
+			print_line(b, size % 10 - 1, i);
+		}
+		putchar('\n');
 	}
+	if (size == 0)
+		putchar('\n');
 }
