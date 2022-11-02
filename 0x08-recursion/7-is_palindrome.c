@@ -1,44 +1,50 @@
 #include "holberton.h"
 
-int tmp_prime(int n, int i);
-
 /**
- * divisors - number is prime?
- * @n: integer params
- * @m: integer params
- * Return: boolean
- */
-
-int divisors(int n, int m)
-{
-	if (m % n == 0)
-	{
-		return (0);
-	}
-	else if (m / 2 > n)
-	{
-		return (divisors(n + 2, m));
-	}
-	else
-	{
-		return (1);
-	}
-}
-
-/**
- * is_prime_number - prime
- * @n: integer params
+ * _strlen_recursion - size
+ * @s: pointer to string params
  * Return: recursion
  */
 
-int is_prime_number(int n)
+int _strlen_recursion(char *s)
 {
-	if ((!(n % 2) && n != 2) || n < 2)
+	if (!*s)
 	{
 		return (0);
 	}
-	else
+	return (1 + _strlen_recursion(++s));
+}
+
+/**
+ * p1 - palindrome
+ * @s: pointer to string
+ * @l: position
+ * Return: boolena
+ */
+
+int p1(char *s, int l)
+{
+	if (l < 1)
 	{
-		return (divisors(3, n));
+		return (1);
 	}
+
+	if (*s == *(s + l))
+	{
+		return (p1(s + 1, l - 2));
+	}
+	return (0);
+}
+
+/**
+ * is_palindrome - palindrome
+ * @s: pointer to string
+ * Return: recursion
+ */
+
+int is_palindrome(char *s)
+{
+	int len = _strlen_recursion(s);
+
+	return (p1(s, len - 1));
 }
